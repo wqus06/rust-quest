@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rust Quest · 边玩边学 Rust 语法</title>
+<meta name="description" content="Rust 语法学习小游戏：闯关答题 + 代码填空，边玩边学 Rust" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦀</text></svg>" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <button id="btn-home" class="icon-btn" title="回到首页">🦀</button>
+    <div class="topbar-title">Rust Quest</div>
+    <div class="topbar-stats">
+      <span id="hud-rank" class="pill">Lv.1 铁锈学徒</span>
+      <span id="hud-xp" class="pill">✨ 0 XP</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- 首页 -->
+    <section id="screen-home" class="screen active">
+      <div class="hero">
+        <div class="hero-crab">🦀</div>
+        <h1>Rust Quest</h1>
+        <p class="subtitle">边玩边学 Rust 语法：闯关答题 + 代码填空</p>
+      </div>
+      <div class="stats-row" id="home-stats"></div>
+      <div class="menu">
+        <button class="menu-btn primary" id="btn-mode-levels">⚔️ 闯关模式<small>10 关：从变量到并发，通关解锁下一关</small></button>
+        <button class="menu-btn" id="btn-mode-practice">🎯 自由练习<small>随机 10 题，刷 XP，不掉 ❤️</small></button>
+        <button class="menu-btn" id="btn-mode-code">⌨️ 代码挑战<small>补全代码里的 ___，让它通过编译</small></button>
+      </div>
+      <details class="howto">
+        <summary>📖 玩法说明</summary>
+        <ul>
+          <li>闯关模式：每关 8 道题，你有 3 颗 ❤️，答对 6 题以上通关并解锁下一关。</li>
+          <li>答对 +10 XP，连击 3 次以上每题 +15 XP；通关额外 +50 XP。</li>
+          <li>代码挑战：补全代码中的 <code>___</code>，提交后即时判定，首次全对有加成。</li>
+          <li>每道题都有中文解析 —— 答错了也能学到东西，这才是目的。</li>
+          <li>进度保存在浏览器本地（localStorage），换浏览器/设备不会同步。</li>
+        </ul>
+      </details>
+      <div class="center"><button class="link-btn" id="btn-reset">重置进度</button></div>
+    </section>
+
+    <!-- 选关 -->
+    <section id="screen-levels" class="screen">
+      <h2>⚔️ 选择关卡</h2>
+      <p class="muted">通关当前关卡即可解锁下一关</p>
+      <div id="level-grid" class="level-grid"></div>
+    </section>
+
+    <!-- 答题 -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-top">
+        <div class="quiz-meta"><span id="quiz-topic" class="tag"></span><span id="quiz-progress" class="muted"></span></div>
+        <div class="quiz-meta"><span id="quiz-hearts"></span><span id="quiz-streak" class="streak"></span></div>
+      </div>
+      <div class="progress"><div id="quiz-bar" class="progress-fill"></div></div>
+      <div class="card">
+        <div id="quiz-q" class="quiz-q"></div>
+        <pre id="quiz-code" class="code" style="display:none"><code id="quiz-code-inner"></code></pre>
+        <div id="quiz-options" class="options"></div>
+        <div id="quiz-explain" class="explain" style="display:none"></div>
+        <button id="quiz-next" class="btn primary" style="display:none">下一题 →</button>
+      </div>
+    </section>
+
+    <!-- 代码挑战列表 -->
+    <section id="screen-challenges" class="screen">
+      <h2>⌨️ 代码挑战</h2>
+      <p class="muted">补全 <code>___</code> 处的代码，提交后即时判定</p>
+      <div id="challenge-groups"></div>
+    </section>
+
+    <!-- 代码挑战答题 -->
+    <section id="screen-code" class="screen">
+      <div class="card">
+        <div class="quiz-meta"><span id="code-topic" class="tag"></span></div>
+        <h3 id="code-title"></h3>
+        <p id="code-desc" class="muted"></p>
+        <div id="code-area" class="code code-input-area"></div>
+        <div id="code-feedback" class="explain" style="display:none"></div>
+        <div class="row">
+          <button id="code-submit" class="btn primary">提交 ✅</button>
+          <button id="code-retry" class="btn" style="display:none">再试一次</button>
+          <button id="code-back" class="btn ghost">← 返回列表</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 结算 -->
+    <section id="screen-result" class="screen">
+      <div class="card result-card">
+        <div id="result-emoji" class="result-emoji"></div>
+        <h2 id="result-title"></h2>
+        <p id="result-desc" class="muted"></p>
+        <div id="result-stats" class="stats-row"></div>
+        <div class="row center">
+          <button id="result-retry" class="btn">🔁 再来一次</button>
+          <button id="result-levels" class="btn">🗺️ 选关</button>
+          <button id="result-home" class="btn primary">🏠 首页</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Rust Quest · 纯静态页面，运行于 GitHub Pages</span>
+    <a href="https://github.com/wqus06/rust-quest" target="_blank" rel="noopener">GitHub 仓库</a>
+  </footer>
+</div>
+<script src="js/questions.js"></script>
+<script src="js/challenges.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
