@@ -32,6 +32,10 @@
         <button class="menu-btn primary" id="btn-mode-levels">⚔️ 闯关模式<small>10 关：从变量到并发，通关解锁下一关</small></button>
         <button class="menu-btn" id="btn-mode-practice">🎯 自由练习<small>随机 10 题，刷 XP，不掉 ❤️</small></button>
         <button class="menu-btn" id="btn-mode-code">⌨️ 代码挑战<small>补全代码里的 ___，让它通过编译</small></button>
+        <button class="menu-btn" id="btn-mode-theater">🧠 内存剧场<small>看代码在内存里一步步执行</small></button>
+        <button class="menu-btn" id="btn-mode-bugs">🔍 编译器找茬<small>找出编不过的代码，读懂报错</small></button>
+        <button class="menu-btn" id="btn-mode-order">🧩 代码排序<small>打乱的代码排回正确顺序</small></button>
+        <button class="menu-btn" id="btn-mode-life">⏳ 生命周期<small>看懂引用和变量的存活区间</small></button>
       </div>
       <details class="howto">
         <summary>📖 玩法说明</summary>
@@ -92,6 +96,107 @@
       </div>
     </section>
 
+    <!-- 内存剧场：列表 -->
+    <section id="screen-theater-list" class="screen">
+      <h2>🧠 内存剧场</h2>
+      <p class="muted">单步执行代码，看变量在栈和堆之间如何"搬家"</p>
+      <div id="theater-groups"></div>
+    </section>
+
+    <!-- 内存剧场：播放 -->
+    <section id="screen-theater" class="screen">
+      <div class="card">
+        <div class="quiz-meta"><span id="th-topic" class="tag"></span><span id="th-progress" class="muted"></span></div>
+        <h3 id="th-title"></h3>
+        <div class="theater-grid">
+          <div id="th-code" class="code-lines th-code"></div>
+          <div class="mem-panels">
+            <div class="mem-panel"><div class="mem-head">📦 栈 Stack</div><div id="th-stack"></div></div>
+            <div class="mem-panel"><div class="mem-head">🏔️ 堆 Heap</div><div id="th-heap"></div></div>
+          </div>
+        </div>
+        <div id="th-note" class="explain" style="display:none"></div>
+        <div class="row">
+          <button id="th-prev" class="btn">◀ 上一步</button>
+          <button id="th-next" class="btn primary">下一步 ▶</button>
+          <button id="th-auto" class="btn">▶ 自动播放</button>
+          <button id="th-restart" class="btn ghost">↺ 重来</button>
+          <button id="th-back" class="btn ghost">← 返回</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 编译器找茬：列表 -->
+    <section id="screen-bugs-list" class="screen">
+      <h2>🔍 编译器找茬</h2>
+      <p class="muted">这些代码都编译不过 —— 找出问题所在的行</p>
+      <div id="bugs-groups"></div>
+    </section>
+
+    <!-- 编译器找茬：答题 -->
+    <section id="screen-bug" class="screen">
+      <div class="card">
+        <div class="quiz-meta"><span id="bug-topic" class="tag"></span></div>
+        <h3 id="bug-title"></h3>
+        <p class="muted">点击你认为有问题的代码行（可多选），然后提交</p>
+        <div id="bug-code" class="code-lines"></div>
+        <div id="bug-feedback" class="explain" style="display:none"></div>
+        <div class="row">
+          <button id="bug-submit" class="btn primary">提交 🎯</button>
+          <button id="bug-hint" class="btn">💡 提示</button>
+          <button id="bug-back" class="btn ghost">← 返回列表</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 代码排序：列表 -->
+    <section id="screen-order-list" class="screen">
+      <h2>🧩 代码排序</h2>
+      <p class="muted">代码被打乱了，点击排回正确顺序</p>
+      <div id="order-groups"></div>
+    </section>
+
+    <!-- 代码排序：答题 -->
+    <section id="screen-order" class="screen">
+      <div class="card">
+        <div class="quiz-meta"><span id="ord-topic" class="tag"></span></div>
+        <h3 id="ord-title"></h3>
+        <p id="ord-hint" class="muted"></p>
+        <div class="ord-cols">
+          <div><div class="ord-head">🧩 待选（点击送往右侧）</div><div id="ord-pool" class="ord-list"></div></div>
+          <div><div class="ord-head">📝 你的排列（点击送回左侧）</div><div id="ord-answer" class="ord-list"></div></div>
+        </div>
+        <div id="ord-feedback" class="explain" style="display:none"></div>
+        <div class="row">
+          <button id="ord-submit" class="btn primary">提交 ✅</button>
+          <button id="ord-back" class="btn ghost">← 返回列表</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 生命周期：列表 -->
+    <section id="screen-life-list" class="screen">
+      <h2>⏳ 生命周期</h2>
+      <p class="muted">单步执行，看每个变量和引用在何时"活着"</p>
+      <div id="life-groups"></div>
+    </section>
+
+    <!-- 生命周期：播放 -->
+    <section id="screen-life" class="screen">
+      <div class="card">
+        <div class="quiz-meta"><span id="lf-topic" class="tag"></span><span id="lf-progress" class="muted"></span></div>
+        <h3 id="lf-title"></h3>
+        <div id="lf-code" class="code-lines"></div>
+        <div class="lf-bars" id="lf-bars"></div>
+        <div id="lf-note" class="explain" style="display:none"></div>
+        <div class="row">
+          <button id="lf-prev" class="btn">◀ 上一行</button>
+          <button id="lf-next" class="btn primary">下一行 ▶</button>
+          <button id="lf-back" class="btn ghost">← 返回</button>
+        </div>
+      </div>
+    </section>
+
     <!-- 结算 -->
     <section id="screen-result" class="screen">
       <div class="card result-card">
@@ -116,5 +221,10 @@
 <script src="js/questions.js"></script>
 <script src="js/challenges.js"></script>
 <script src="js/app.js"></script>
+<script src="js/theater.js"></script>
+<script src="js/bugs.js"></script>
+<script src="js/order.js"></script>
+<script src="js/lifelines.js"></script>
+<script src="js/modes.js"></script>
 </body>
 </html>

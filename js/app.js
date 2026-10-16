@@ -37,7 +37,8 @@ function loadSave() {
   return defaultSave();
 }
 function defaultSave() {
-  return { xp: 0, unlocked: 1, passed: {}, best: {}, challengesDone: {}, totalAnswered: 0, totalCorrect: 0 };
+  return { xp: 0, unlocked: 1, passed: {}, best: {}, challengesDone: {}, totalAnswered: 0, totalCorrect: 0,
+           theaterDone: {}, bugsDone: {}, orderDone: {}, lifeDone: {} };
 }
 let save = loadSave();
 function persist() {
@@ -111,10 +112,14 @@ function renderHome() {
   const passedCount = Object.keys(save.passed).length;
   const doneCh = Object.keys(save.challengesDone).length;
   const totalCh = (typeof CODE_CHALLENGES !== "undefined") ? CODE_CHALLENGES.length : 0;
+  const doneTh = (typeof THEATER !== "undefined") ? Object.keys(save.theaterDone || {}).length + " / " + THEATER.length : "–";
+  const doneBug = (typeof BUGS !== "undefined") ? Object.keys(save.bugsDone || {}).length + " / " + BUGS.length : "–";
   const rate = save.totalAnswered ? Math.round(save.totalCorrect / save.totalAnswered * 100) : 0;
   $("home-stats").innerHTML =
     statHtml(passedCount + " / 10", "闯关通关") +
     statHtml(doneCh + " / " + totalCh, "代码挑战") +
+    statHtml(doneTh, "内存剧场") +
+    statHtml(doneBug, "编译器找茬") +
     statHtml(rate + "%", "答题正确率");
   updateHud();
 }
